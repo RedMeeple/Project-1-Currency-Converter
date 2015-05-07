@@ -20,16 +20,25 @@ class Currency
     if self.code != other_currency.code
       raise DifferentCurrencyCodeError
     else
-      subtracted = "#{self.code} #{self.amount - other_currency.amount}"
+      difference = "#{self.code} #{self.amount - other_currency.amount}"
     end
   end
   def + (other_currency)
     if self.code != other_currency.code
       raise DifferentCurrencyCodeError
     else
-      added = "#{self.code}#{self.amount + other_currency.amount}"
+      sum = "#{self.code}#{self.amount + other_currency.amount}"
     end
   end
+  def * (number)
+    product = "#{self.code}#{self.amount*number}"
+  end
+  def / (number)
+    quotient = "#{self.code}#{self.amount/number}"
+  end
+
+
+
 end
 
 class DifferentCurrencyCodeError < StandardError
@@ -41,4 +50,5 @@ end
 try = Currency.new("$2.00")
 another = Currency.new("@1.05")
 
-puts try - another
+puts try * 2
+puts try / 2
