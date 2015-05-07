@@ -27,30 +27,28 @@ class Currency
     @amount
   end
   def == (other_currency)
-    true if self.code == other_currency.code && self.amount == other_currency.amount
+    true if @code == other_currency.code && @amount == other_currency.amount
   end
   def - (other_currency)
-    if self.code != other_currency.code
+    if @code != other_currency.code
       raise DifferentCurrencyCodeError
     else
       Currency.new(self.code, self.amount - other_currency.amount)
     end
   end
   def + (other_currency)
-    if self.code != other_currency.code
+    if @code != other_currency.code
       raise DifferentCurrencyCodeError
     else
-      Currency.new(self.code, self.amount + other_currency.amount)
+      Currency.new(@code, @amount + other_currency.amount)
     end
   end
   def * (number)
-    Currency.new(self.code, self.amount*number)
+    Currency.new(@code, @amount*number)
   end
   def / (number)
-    Currency.new(self.code, self.amount/number)
+    Currency.new(@code, @amount/number)
   end
-
-
 
 end
 
@@ -62,5 +60,9 @@ end
 
 try = Currency.new("$2.05")
 another = Currency.new("$1.05")
+nextup = Currency.new("$2.05")
 
-puts (another * 2).amount
+puts (another /2).all
+puts "yay" if try == nextup
+puts "boo" if try == another
+puts (try + another - nextup*2).all
