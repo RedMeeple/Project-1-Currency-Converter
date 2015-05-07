@@ -33,7 +33,7 @@ class Currency
     if @code != other_currency.code
       raise DifferentCurrencyCodeError
     else
-      Currency.new(self.code, self.amount - other_currency.amount)
+      Currency.new(@code, @amount - other_currency.amount)
     end
   end
   def + (other_currency)
