@@ -13,9 +13,25 @@ class Currency
   def amount
     @amount
   end
+  def == (other_currency)
+    if self.code != other_currency.code
+      nil
+      #raise error message
+    elsif self.amount == other_currency.amount
+      true
+    else
+      false
+    end
+  end
 end
 
 
 try = Currency.new("$2.05")
-puts try.code
-puts try.amount
+another = Currency.new("$2.05")
+
+
+if try == another
+  puts "Yay!"
+else
+  puts "Keep going"
+end
