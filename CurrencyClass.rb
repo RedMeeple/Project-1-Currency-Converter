@@ -14,24 +14,18 @@ class Currency
     @amount
   end
   def == (other_currency)
-    if self.code != other_currency.code
-      nil
-      #raise error message
-    elsif self.amount == other_currency.amount
-      true
-    else
-      false
-    end
+    true if self.code == other_currency.code && self.amount == other_currency.amount
+  end
+  def - (other_currency)
+    subtracted = "#{self.code} #{self.amount - other_currency.amount}"
+  end
+  def + (other_currency)
+    added = "#{self.code}#{self.amount + other_currency.amount}"
   end
 end
 
 
-try = Currency.new("$2.05")
-another = Currency.new("$2.05")
+try = Currency.new("$2.00")
+another = Currency.new("$1.05")
 
-
-if try == another
-  puts "Yay!"
-else
-  puts "Keep going"
-end
+puts try - another
