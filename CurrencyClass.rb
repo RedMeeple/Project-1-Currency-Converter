@@ -17,15 +17,28 @@ class Currency
     true if self.code == other_currency.code && self.amount == other_currency.amount
   end
   def - (other_currency)
-    subtracted = "#{self.code} #{self.amount - other_currency.amount}"
+    if self.code != other_currency.code
+      raise DifferentCurrencyCodeError
+    else
+      subtracted = "#{self.code} #{self.amount - other_currency.amount}"
+    end
   end
   def + (other_currency)
-    added = "#{self.code}#{self.amount + other_currency.amount}"
+    if self.code != other_currency.code
+      raise DifferentCurrencyCodeError
+    else
+      added = "#{self.code}#{self.amount + other_currency.amount}"
+    end
   end
 end
 
+class DifferentCurrencyCodeError < StandardError
+  def message
+    "You can only add and subtract equivalent currencies."
+  end
+end
 
 try = Currency.new("$2.00")
-another = Currency.new("$1.05")
+another = Currency.new("@1.05")
 
 puts try - another
