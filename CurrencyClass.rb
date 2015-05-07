@@ -1,11 +1,24 @@
 class Currency
-  def initialize(entry)
-    @code = ""
-    while entry[0].to_i.to_s != entry[0]
-      @code << entry[0]
-      entry[0] = ''
+  def initialize(entry, optional_amount = "000.00")
+    @codes = {'$' => 'USD' , '€' => 'EUR', '¥' => 'JPY', '£' => 'JBP', '₽' => 'RUB'}
+      # "INR" => ₨, "KRW" => ₩, "NGN" => ₦, "UAH" => ₴, "LAK" => ₭, "PHP" => ₱,
+      # "MNT" => ₮, "TRY" => ₺, "THB" => ฿, "SAR" => ﷼, "INR" => ₹, "PYG" => ₲,
+      # "CRC" => ₡, "TRL" => ₤, "KZT" => ₸, "GHC" => ₵, "VND" => ₫
+    if optional_amount == "000.00"
+      @code = ""
+      while entry[0].to_i.to_s != entry[0]
+        @code << entry[0]
+        entry[0] = ''
+        @code.strip!
+      end
+      if @code.length != 3
+        @code = @codes[@code]
+      end
+      @amount = entry.to_f
+    else
+      @code = entry
+      @amount = optional_amount.to_f
     end
-    @amount = entry.to_f
   end
   def code
     @code
@@ -20,21 +33,21 @@ class Currency
     if self.code != other_currency.code
       raise DifferentCurrencyCodeError
     else
-      difference = "#{self.code} #{self.amount - other_currency.amount}"
+      Currency.new(self.code, self.amount - other_currency.amount)
     end
   end
   def + (other_currency)
     if self.code != other_currency.code
       raise DifferentCurrencyCodeError
     else
-      sum = "#{self.code}#{self.amount + other_currency.amount}"
+      Currency.new(self.code, self.amount + other_currency.amount)
     end
   end
   def * (number)
-    product = "#{self.code}#{self.amount*number}"
+    Currency.new(self.code, self.amount*number)
   end
   def / (number)
-    quotient = "#{self.code}#{self.amount/number}"
+    Currency.new(self.code, self.amount/number)
   end
 
 
@@ -47,8 +60,7 @@ class DifferentCurrencyCodeError < StandardError
   end
 end
 
-try = Currency.new("$2.00")
-another = Currency.new("@1.05")
+try = Currency.new("$2.05")
+another = Currency.new("$1.05")
 
-puts try * 2
-puts try / 2
+puts (another * 2).amount
