@@ -30,15 +30,19 @@ class CurrencyTrader
   end
 
   def should_i_trade
-
+    if (@previous_conversion_rates_to_USD[@destination]/@conversion_rates_to_USD[@destination]) > 1
+      true
+    else
+      false
+    end
   end
 end
 
 first = Currency.new("$2.00")
 
-testit = CurrencyTrader.new(first, 'EUR')
+testit = CurrencyTrader.new(first, 'CRC')
 
-puts testit.best_trade
+puts "Yes" if testit.should_i_trade
 
 #
 # past = Currency.new(foreign, (@previous_conversion_rates_to_USD[foreign] /
