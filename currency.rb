@@ -13,6 +13,9 @@ class Currency
         @code.strip!
       end
       if @code.length != 3
+        if @codes[@code].nil?
+          raise UnknownCurrencyCodeError
+        end
         @code = @codes[@code]
       end
       @amount = entry.to_f
@@ -73,5 +76,11 @@ end
 class DifferentCurrencyCodeError < StandardError
   def message
     "You can only add and subtract equivalent currencies."
+  end
+end
+
+class UnknownCurrencyCodeError < StandardError
+  def message
+      "Please try a different currency code."
   end
 end
