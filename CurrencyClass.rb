@@ -1,9 +1,10 @@
 class Currency
   def initialize(entry, optional_amount = "000.00")
-    @codes = {'$' => 'USD' , '€' => 'EUR', '¥' => 'JPY', '£' => 'JBP', '₽' => 'RUB'}
-      # "INR" => ₨, "KRW" => ₩, "NGN" => ₦, "UAH" => ₴, "LAK" => ₭, "PHP" => ₱,
-      # "MNT" => ₮, "TRY" => ₺, "THB" => ฿, "SAR" => ﷼, "INR" => ₹, "PYG" => ₲,
-      # "CRC" => ₡, "TRL" => ₤, "KZT" => ₸, "GHC" => ₵, "VND" => ₫
+    @codes = {'$' => 'USD' , '€' => 'EUR', '¥' => 'JPY', '£' => 'GBP',
+      '₽' => 'RUB', '₨' => 'INR', '₩' => 'KRW', '₦' => 'NGN', '₴' => 'UAH',
+      '₭' => 'LAK', '₱' => 'PHP', '₮' => 'MNT', '₺' => 'TRY', '฿' => 'THB',
+      '﷼' => 'SAR', '₹' => 'INR', '₲' => 'PYG', '₡' => 'CRC', '₤' => 'TRL',
+      '₸' => 'KZT', '₵' => 'GHC', '₫' => 'VND' }
     if optional_amount == "000.00"
       @code = ""
       while entry[0].to_i.to_s != entry[0]
@@ -20,15 +21,29 @@ class Currency
       @amount = optional_amount.to_f
     end
   end
+
   def code
     @code
   end
+
   def amount
     @amount
   end
+
   def == (other_currency)
     true if @code == other_currency.code && @amount == other_currency.amount
   end
+
+  def <=> (other_currency)
+    if @amount < other_currency.amount
+      -1
+    elsif @amount > other_currency.amount
+      1
+    else
+      0
+    end
+  end
+
   def - (other_currency)
     if @code != other_currency.code
       raise DifferentCurrencyCodeError
@@ -36,6 +51,7 @@ class Currency
       Currency.new(@code, @amount - other_currency.amount)
     end
   end
+
   def + (other_currency)
     if @code != other_currency.code
       raise DifferentCurrencyCodeError
@@ -43,9 +59,11 @@ class Currency
       Currency.new(@code, @amount + other_currency.amount)
     end
   end
+
   def * (number)
     Currency.new(@code, @amount*number)
   end
+
   def / (number)
     Currency.new(@code, @amount/number)
   end
@@ -57,12 +75,3 @@ class DifferentCurrencyCodeError < StandardError
     "You can only add and subtract equivalent currencies."
   end
 end
-
-try = Currency.new("$2.05")
-another = Currency.new("$1.05")
-nextup = Currency.new("$2.05")
-
-puts (another /2).all
-puts "yay" if try == nextup
-puts "boo" if try == another
-puts (try + another - nextup*2).all
