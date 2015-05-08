@@ -14,13 +14,21 @@ previous_conversion_rates_to_USD = {'USD' => 1, 'EUR' => 0.721, 'JPY' => 101.665
   'MNT' => 1802.508, 'TRY' => 2.07, 'THB' => 32.505, 'SAR' => 3.75,
   'PYG' => 4443.44, 'CRC' => 554.248, 'KZT' => 181.879, 'VND' => 21084.147} # As of May 8, 2014
 
+pretend_conversions_to_USD = {'USD' => 1, 'EUR' => 0.65, 'JPY' => 105,
+  'GBP' => 0.98, 'RUB' => 24, 'INR' => 52, 'KRW' => 1090,
+  'NGN' => 170, 'UAH' => 15, 'LAK' => 8200, 'PHP' => 48,
+  'MNT' => 1650, 'TRY' => 3, 'THB' => 37, 'SAR' => 3.75,
+  'PYG' => 4400, 'CRC' => 550, 'KZT' => 186, 'VND' => 21006} # As of my imagination
+
 
 first = Currency.new("$2.00")
 
-testit = CurrencyConverter.new(current_conversions_to_USD)
+present = CurrencyConverter.new(current_conversions_to_USD)
 
 old = CurrencyConverter.new(previous_conversion_rates_to_USD)
 
-please = CurrencyTrader.new(old, testit, first)
+pretend = CurrencyConverter.new(pretend_conversions_to_USD)
 
-puts "yes" if please.should_i_trade('CRC')
+please = CurrencyTrader.new([old, present, pretend], first)
+
+puts please.best_trade
