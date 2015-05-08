@@ -18,16 +18,15 @@ class CurrencyTrader
   end
 
   def best_trade
-    best_trade = ''
-    @previous_conversion_rates_to_USD.each_key { |foreign|
-      past = Currency.new(foreign, (@previous_conversion_rates_to_USD[foreign] /
-      @previous_conversion_rates_to_USD[@origin.code]) * @origin.amount)
-      present = Currency.new(@origin.code, (@conversion_rates_to_USD[@origin.code] /
-      @conversion_rates_to_USD[past.code]))
-      if (present <=> @origin) == 1
-        best_trade = past.code
-      end }
-      return best_trade
+    best_ratio = 0
+    best_trade = ""
+    @previous_conversion_rates_to_USD.each_value do |rate|
+      if ((rate/@conversion_rates_to_USD[@previous_conversion_rates_to_USD.key(rate)]) <=> best_ratio) == 1
+        best_ratio = rate/@conversion_rates_to_USD[@previous_conversion_rates_to_USD.key(rate)]
+        best_trade = @previous_conversion_rates_to_USD.key(rate)
+      end
+    end
+    return best_trade
   end
 
   def should_i_trade
@@ -40,3 +39,9 @@ first = Currency.new("$2.00")
 testit = CurrencyTrader.new(first, 'EUR')
 
 puts testit.best_trade
+
+#
+# past = Currency.new(foreign, (@previous_conversion_rates_to_USD[foreign] /
+# @previous_conversion_rates_to_USD[@origin.code]) * @origin.amount)
+# present = Currency.new(@origin.code, (@conversion_rates_to_USD[@origin.code] /
+# @conversion_rates_to_USD[past.code]) * past.amount)
