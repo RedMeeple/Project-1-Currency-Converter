@@ -26,19 +26,21 @@ class CurrencyTrader
     else
       start = @origin
       spot = 0
-      until spot = @converters.length-2
+      trade_route = ''
+      until spot == @converters.length-2
         @converters[spot].hash.each_value do |rate|
           if ((rate/@converters[spot+1].hash[@converters[spot].hash.key(rate)]) <=> best_ratio) == 1
             best_ratio = rate/@converters[spot+1].hash[@converters[spot].hash.key(rate)]
-            best_trade << @converters[spot].hash.key(rate)
-            best_trade << "#{current.best_trade} and then "
+            best_trade = @converters[spot].hash.key(rate)
           end
         end
         spot += 1
-        best_trade << current.best_trade
+        start = best_trade
+        trade_route << best_trade
       end
+      puts trade_route
     end
-    "If you trade to #{best_trade} you will end up with #{best_ratio*@origin.amount}"
+    "If you trade to #{best_trade} you will end up with #{@origin.code} #{best_ratio*@origin.amount}"
   end
 
 
