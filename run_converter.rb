@@ -29,6 +29,6 @@ old = CurrencyConverter.new(previous_conversion_rates_to_USD)
 
 pretend = CurrencyConverter.new(pretend_conversions_to_USD)
 
-please = CurrencyTrader.new([old, present, pretend], first)
+trading = CurrencyTrader.new([old, present, pretend], first)
 
-puts please.best_trade
+puts trading.best_trade
