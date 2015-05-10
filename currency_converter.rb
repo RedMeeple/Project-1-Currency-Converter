@@ -5,12 +5,12 @@ class CurrencyConverter
     @conversion_rates_to_USD = hash
   end
 
-  def convert(origin, destination)
-    if @conversion_rates_to_USD[destination].nil? || @conversion_rates_to_USD[origin.code].nil?
+  def convert(origin, destination_code)
+    if @conversion_rates_to_USD[destination_code].nil? || @conversion_rates_to_USD[origin.code].nil?
       raise UnknownCurrencyCodeError
     end
-    Currency.new(destination, (@conversion_rates_to_USD[destination] /
-    @conversion_rates_to_USD[origin.code]) * origin.amount)
+    Currency.new(destination, (@conversion_rates_to_USD[destination_code] /
+      @conversion_rates_to_USD[origin.code]) * origin.amount)
   end
 
   def hash

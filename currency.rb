@@ -1,4 +1,6 @@
 class Currency
+  include Comparable
+
   def initialize(entry, optional_amount = "000.00")
     @codes = {
       '$' => 'USD' , '€' => 'EUR', '¥' => 'JPY', '£' => 'GBP', '₽' => 'RUB',
@@ -34,7 +36,7 @@ class Currency
   end
 
   def == (other_currency)
-    true if @code == other_currency.code && @amount == other_currency.amount
+    @code == other_currency.code && @amount == other_currency.amount
   end
 
   def <=> (other_currency)

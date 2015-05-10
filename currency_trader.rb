@@ -19,15 +19,15 @@ class CurrencyTrader
       first_rate.hash.each_key do |country|
         puts "In hash key: " + country + ", " + start.code
         trade = CurrencyConverter.new(first_rate.hash)
-        trade_amount = trade.convert(start, country)
-        mature_amount = trade_amount * (second_rate.hash[country] / first_rate.hash[country])
-        puts mature_amount.code
+        trade_currency = trade.convert(start, country)
+        mature_currency = trade_currency * (second_rate.hash[country] / first_rate.hash[country])
+        puts mature_currency.code
         mature = CurrencyConverter.new(second_rate.hash)
-        revert_amount = mature.convert(mature_amount, start.code)
+        revert_currency = mature.convert(mature_currency, start.code)
         ## revert_amount not calculating correctly
-        puts "RA: " + revert_amount.amount.to_s
-        if revert_amount > best_value
-          best_value = revert_amount
+        puts "RA: " + revert_currency.amount.to_s
+        if revert_currency > best_value
+          best_value = revert_currency
           puts "BV: " + best_value.amount.to_s
           best_trade = country
         end
