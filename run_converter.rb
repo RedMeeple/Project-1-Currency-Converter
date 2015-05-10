@@ -5,7 +5,7 @@ require "./currency_trader.rb"
 current_conversions_to_USD = {'USD' => 1.0, 'EUR' => 0.887, 'JPY' => 119.822,
   'GBP' => 0.647, 'RUB' => 50.775, 'INR' => 63.927, 'KRW' => 1091.49,
   'NGN' => 199.049, 'UAH' => 20.49, 'LAK' => 8088.57, 'PHP' => 44.597,
-  'MNT' => 1947.33, 'TRY' => 2.677, 'THB' => 33.458, 'SAR' => 3.75,
+  'MNT' => 1947.33, 'TRY' => 3.677, 'THB' => 33.458, 'SAR' => 3.75,
   'PYG' => 5047.19, 'CRC' => 532.203, 'KZT' => 185.88, 'VND' => 21691.44} # As of May 8, 2015
 
 previous_conversion_rates_to_USD = {'USD' => 1.0, 'EUR' => 0.721, 'JPY' => 101.665,
@@ -23,16 +23,13 @@ pretend_conversions_to_USD = {'USD' => 1.0, 'EUR' => 0.65, 'JPY' => 105.0,
 
 first = Currency.new("UAH25.00")
 
-second = Currency.new("UAH15.00")
-
-
+past = CurrencyConverter.new(previous_conversion_rates_to_USD)
 present = CurrencyConverter.new(current_conversions_to_USD)
-
-
-old = CurrencyConverter.new(previous_conversion_rates_to_USD)
-
 pretend = CurrencyConverter.new(pretend_conversions_to_USD)
 
-trading = CurrencyTrader.new([old, present, pretend], first)
+trading = CurrencyTrader.new([past, present, pretend], first)
 
 puts trading.best_trade
+
+puts "yes" if trading.should_i_trade('MNT')
+puts "definitely" if trading.should_i_trade('CRC')

@@ -11,34 +11,29 @@ class CurrencyTrader
     raise MissingCurrencyError if @converters.length < 2
 
     best_value = 0
-    best_trade = ''
     start = @origin
-    trade_route = []
     new_start = @origin
+    best_trade = ''
+    trade_route = []
 
     @converters.each_cons(2) do |first_rate, second_rate|
       first_rate.hash.each_key do |country|
-        puts "In hash key: " + country + ", " + start.code
         first_currency = first_rate.convert(start, country)
         second_currency = second_rate.convert(start, country)
         if (second_currency.amount/first_currency.amount) > best_value
-          puts second_currency.amount
-          puts first_currency.amount
           best_value = second_currency.amount/first_currency.amount
           new_start = Currency.new(start.code, (second_currency.amount/first_currency.amount) * start.amount)
-          puts "BV: " + best_value.to_s
           best_trade = country
         end
       end
       start = new_start
       trade_route << best_trade
-      puts trade_route
     end
     "If you trade to #{trade_route} you will end up with #{start.code} #{start.amount}"
   end
 
-  def should_i_trade(destination)
-    if (@converters[0].hash[destination]/@converters[1].hash[destination]) > 1
+  def should_i_trade(destination_code)
+    if (@converters[0].hash[destination_code]/@converters[1].hash[destination_code]) > 1
       true
     else
       false
