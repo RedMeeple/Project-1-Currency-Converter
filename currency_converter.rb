@@ -9,7 +9,7 @@ class CurrencyConverter
     if @conversion_rates_to_USD[destination_code].nil? || @conversion_rates_to_USD[origin.code].nil?
       raise UnknownCurrencyCodeError
     end
-    Currency.new(destination, (@conversion_rates_to_USD[destination_code] /
+    Currency.new(destination_code, (@conversion_rates_to_USD[destination_code] /
       @conversion_rates_to_USD[origin.code]) * origin.amount)
   end
 
