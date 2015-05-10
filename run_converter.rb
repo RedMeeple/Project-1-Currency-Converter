@@ -21,7 +21,7 @@ pretend_conversions_to_USD = {'USD' => 1.0, 'EUR' => 0.65, 'JPY' => 105.0,
   'PYG' => 4400.0, 'CRC' => 550.0, 'KZT' => 186.0, 'VND' => 21006.0} # As of my imagination
 
 
-first = Currency.new("UAH25.00", '200')
+first = Currency.new("UAH25.00")
 
 second = Currency.new("UAH15.00")
 

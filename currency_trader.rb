@@ -14,25 +14,27 @@ class CurrencyTrader
     best_trade = ''
     start = @origin
     trade_route = []
+    new_start = @origin
 
     @converters.each_cons(2) do |first_rate, second_rate|
       first_rate.hash.each_key do |country|
         puts "In hash key: " + country + ", " + start.code
         first_currency = first_rate.convert(start, country)
-        second_currency = second_rate.convert(first_currency, start.code)
-
-        puts "RA: " + second_currency.amount.to_s
-        if (second_currency.amount/start.amount) > best_value
-          best_value = second_currency.amount/start.amount
+        second_currency = second_rate.convert(start, country)
+        if (second_currency.amount/first_currency.amount) > best_value
+          puts second_currency.amount
+          puts first_currency.amount
+          best_value = second_currency.amount/first_currency.amount
+          new_start = Currency.new(start.code, (second_currency.amount/first_currency.amount) * start.amount)
           puts "BV: " + best_value.to_s
           best_trade = country
         end
       end
-      start = best_value
+      start = new_start
       trade_route << best_trade
       puts trade_route
     end
-    "If you trade to #{trade_route} you will end up with #{best_value.code} #{best_value.amount}"
+    "If you trade to #{trade_route} you will end up with #{start.code} #{start.amount}"
   end
 
   def should_i_trade(destination)
