@@ -13,28 +13,25 @@ class CurrencyTrader
     best_value = @origin
     best_trade = ''
     start = @origin
-    spot = 0
     trade_route = []
 
-    until spot == @converters.length-1
-      @converters[spot].hash.each_key do |country|
+    @converters.each_cons(2) do |first_rate, second_rate|
+      first_rate.hash.each_key do |country|
         puts "In hash key: " + country + ", " + start.code
-        trade = CurrencyConverter.new(@converters[spot].hash)
+        trade = CurrencyConverter.new(first_rate.hash)
         trade_amount = trade.convert(start, country)
-        mature_amount = trade_amount * (@converters[spot+1].hash[country] / @converters[spot].hash[country])
+        mature_amount = trade_amount * (second_rate.hash[country] / first_rate.hash[country])
         puts mature_amount.code
-        mature = CurrencyConverter.new(@converters[spot+1].hash)
+        mature = CurrencyConverter.new(second_rate.hash)
         revert_amount = mature.convert(mature_amount, start.code)
         ## revert_amount not calculating correctly
         puts "RA: " + revert_amount.amount.to_s
-        if (revert_amount <=> best_value) == 1
+        if revert_amount > best_value
           best_value = revert_amount
           puts "BV: " + best_value.amount.to_s
           best_trade = country
         end
       end
-      spot += 1
-      puts spot
       start = best_value
       puts start.amount
       trade_route << best_trade
