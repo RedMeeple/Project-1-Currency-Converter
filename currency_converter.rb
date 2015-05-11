@@ -1,20 +1,17 @@
 require "./currency.rb"
 
 class CurrencyConverter
+  attr_reader :hash
+
   def initialize(hash)
-    @conversion_rates_to_USD = hash
+    @hash = hash
   end
 
   def convert(origin, destination_code)
-    if @conversion_rates_to_USD[destination_code].nil? || @conversion_rates_to_USD[origin.code].nil?
+    if @hash[destination_code].nil? || @hash[origin.code].nil?
       raise UnknownCurrencyCodeError
     end
-    Currency.new(destination_code, (@conversion_rates_to_USD[destination_code] /
-      @conversion_rates_to_USD[origin.code]) * origin.amount)
+    Currency.new(destination_code, (@hash[destination_code] /
+      @hash[origin.code]) * origin.amount)
   end
-
-  def hash
-    @conversion_rates_to_USD
-  end
-
 end

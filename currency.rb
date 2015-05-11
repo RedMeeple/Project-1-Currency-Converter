@@ -1,5 +1,6 @@
 class Currency
   include Comparable
+  attr_reader :amount, :code
 
   def initialize(entry, optional_amount = "000.00")
     @codes = {
@@ -27,26 +28,12 @@ class Currency
     end
   end
 
-  def code
-    @code
-  end
-
-  def amount
-    @amount
-  end
-
   def == (other_currency)
     @code == other_currency.code && @amount == other_currency.amount
   end
 
   def <=> (other_currency)
-    if @amount < other_currency.amount
-      -1
-    elsif @amount > other_currency.amount
-      1
-    else
-      0
-    end
+    @amount < other_currency.amount ? -1 : @amount > other_currency.amount ? 1 : 0
   end
 
   def - (other_currency)
